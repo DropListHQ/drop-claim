@@ -46,9 +46,8 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
 type ReduxType = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatcherToProps> 
 
 
-type TDefineTitle = (tokenName: string, address: string, allowedAddressList: string[]) => ReactElement 
-const defineTitle: TDefineTitle = (tokenName, address, allowedAddressList) => {
-  const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
+type TDefineTitle = (tokenName: string, address: string, allowed: boolean) => ReactElement 
+const defineTitle: TDefineTitle = (tokenName, address, allowed) => {
   const addressShorten = shortenString(address)
   if (address && allowed) {
     return <Title>Claim <strong>{tokenName}</strong> to address: <span>{addressShorten}</span></Title>
@@ -63,17 +62,22 @@ const defineTitle: TDefineTitle = (tokenName, address, allowedAddressList) => {
 }
 
 const InitialScreen: FC<ReduxType> = ({ name, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
-  const title = defineTitle(name, address, allowedAddressList)
+  const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
+  const title = defineTitle(name, address, allowed)
   return <> 
     {logoURL && <TokenImage
       src={logoURL}
       alt={name}
     />}
     {title}
-    <ScreenButton disabled={!tokenId || !amount} title='Claim' onClick={() => {
-      if (!tokenId || !amount) { return }
-      claim(address, proof, tokenId, amount, dropAddress, provider, index)
-    }}/>
+    <ScreenButton
+      disabled={!tokenId || !amount || !allowed}
+      title='Claim'
+      onClick={() => {
+        if (!tokenId || !amount) { return }
+        claim(address, proof, tokenId, amount, dropAddress, provider, index)
+      }}
+    />
     <TextComponent
       onClick={() => {
         console.log('here')

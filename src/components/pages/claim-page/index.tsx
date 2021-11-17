@@ -78,12 +78,12 @@ const ClaimPage: FC<ReduxType> = ({
   const { ipfs }: { ipfs: string } = useParams()
   const screen = defineCurrentScreen(step)
   useEffect(() => {
+    if (provider === null) { setStep('set_connector') }
     if (chainId && provider) {
+      console.log('getting data')
       getData(provider, ipfs, chainId, address)
-    } else {
-      setStep('set_connector')
     }
-  }, [])
+  }, [provider, address, chainId])
   return <Page noHeader={step === 'check_eligibility'}>
     <Container>
       {screen}
