@@ -4,7 +4,7 @@ import { Constants } from './constants';
 const initialState: UserState = {
   address: '',
   loading: false,
-  provider: null,
+  provider: undefined,
   chainId: null
 };
 

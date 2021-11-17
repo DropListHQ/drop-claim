@@ -4,6 +4,7 @@ type TDropStep = 'loading' |
                  'not_allowed' |
                  'claiming_finished' |
                  'claiming_process' |
-                 'check_eligibility'
+                 'check_eligibility' |
+                 'set_connector'
 
 export default TDropStep

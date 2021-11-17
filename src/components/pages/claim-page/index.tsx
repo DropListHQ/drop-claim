@@ -6,8 +6,10 @@ import NotAllowedForClaim from './not-allowed-for-claim'
 import ClaimingFinished from './claiming-finished'
 import ClaimingProcess from './claiming-process'
 import CheckEligibility from './check-eligibility'
+import SetConnector from './set-connector'
 import { ScreenLoader } from 'components/common'
 import Page from '../page'
+import { TDropStep } from 'types'
 
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
@@ -15,6 +17,7 @@ import { Container } from './styled-components'
 import { useParams } from 'react-router-dom'
 import { Dispatch } from 'redux';
 import * as dropAsyncActions from 'data/store/reducers/drop/async-actions'
+import * as dropActions from 'data/store/reducers/drop/actions'
 import { DropActions } from 'data/store/reducers/drop/types'
 import { TokenActions } from 'data/store/reducers/token/types'
 
@@ -34,7 +37,8 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         ipfs: string,
         chainId: number,
         address: string
-      ) => dropAsyncActions.getData(dispatch, provider, ipfs, chainId, address)
+      ) => dropAsyncActions.getData(dispatch, provider, ipfs, chainId, address),
+      setStep: (step: TDropStep) => dispatch(dropActions.setStep(step))
   }
 }
 
@@ -56,6 +60,8 @@ const defineCurrentScreen: TDefineStep = step => {
       return <ClaimingFinished />
     case 'check_eligibility':
       return <CheckEligibility />
+    case 'set_connector':
+      return <SetConnector />
     default:
       return <ScreenLoader />
   }
@@ -66,14 +72,16 @@ const ClaimPage: FC<ReduxType> = ({
   getData,
   address,
   chainId,
-  provider
+  provider,
+  setStep
 }) => {
   const { ipfs }: { ipfs: string } = useParams()
   const screen = defineCurrentScreen(step)
   useEffect(() => {
-    console.log({ chainId })
-    if (chainId) {
+    if (chainId && provider) {
       getData(provider, ipfs, chainId, address)
+    } else {
+      setStep('set_connector')
     }
   }, [])
   return <Page noHeader={step === 'check_eligibility'}>

@@ -4,6 +4,7 @@ import { Route, Switch, Router } from 'react-router-dom'
 import Web3Modal from "web3modal";
 import { Web3Provider } from '@ethersproject/providers'
 import { history } from 'data/store'
+import { ScreenLoader } from 'components/common'
 import {
   NotFound,
   ClaimPage
@@ -39,22 +40,26 @@ const AppRouter: FC<ReduxType> = ({ setAddress, setProvider, setChainId, provide
         cacheProvider: true, // optional
         providerOptions // required
       })
-      const provider = await web3Modal.connect();
-      provider.on("accountsChanged", (accounts: string[]) => {
-        window.location.reload()
-      })
-      provider.on("chainChanged", (chainId: number) => {
-        window.location.reload()
-      });
-      
-      const providerWeb3 = new Web3Provider(provider)
-      
-      const { chainId } = await providerWeb3.getNetwork()
-      const accounts = await providerWeb3.listAccounts()
-      setAddress(accounts[0])
-      setChainId(chainId)
-      setProvider(providerWeb3)
-      
+      try {
+        const provider = await web3Modal.connect();
+        provider.on("accountsChanged", (accounts: string[]) => {
+          window.location.reload()
+        })
+        provider.on("chainChanged", (chainId: number) => {
+          window.location.reload()
+        });
+        
+        const providerWeb3 = new Web3Provider(provider)
+        
+        const { chainId } = await providerWeb3.getNetwork()
+        const accounts = await providerWeb3.listAccounts()
+        setAddress(accounts[0])
+        setChainId(chainId)
+        setProvider(providerWeb3)
+      } catch (err) {
+        console.error({ err: 'Some error occured while connecting to MetaMask' })
+        setProvider(null)
+      }
     }
     
     if (provider) { return }
@@ -63,8 +68,8 @@ const AppRouter: FC<ReduxType> = ({ setAddress, setProvider, setChainId, provide
 
   
 
-  if (!provider) {
-    return <>Loading</>
+  if (provider === undefined) {
+    return <ScreenLoader />
   }
 
   return <Router history={history}>
