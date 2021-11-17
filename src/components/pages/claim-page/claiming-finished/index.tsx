@@ -6,14 +6,15 @@ import { shortenString, defineNetworkName } from 'helpers'
 import { Title, ScreenButton } from './styled-components'
 
 const mapStateToProps = ({
-  drop: { hash, chainId, tokenId, tokenAddress },
+  drop: { hash, chainId, tokenId, tokenAddress, logoURL },
   user: { address },
   token: { image, name }
 }: RootState) => ({
   address,
   image, name,
   chainId,
-  tokenId, tokenAddress
+  tokenId, tokenAddress,
+  logoURL
 })
 type ReduxType = ReturnType<typeof mapStateToProps>
 type TDefineTitle = (tokenName: string, address: string) => ReactElement
@@ -38,11 +39,11 @@ const defineTitle: TDefineTitle = (tokenName, address) => {
   return <Title><strong>{tokenName}</strong> has been claimed</Title>
 }
 
-const ClaimingFinished: FC<ReduxType> = ({ image, name, address, chainId, tokenId, tokenAddress }) => {
+const ClaimingFinished: FC<ReduxType> = ({ image, name, address, chainId, tokenId, tokenAddress, logoURL }) => {
   const title = defineTitle(name, shortenString(address))
   return <>
-    {image && <TokenImage
-      src={image}
+    {logoURL && <TokenImage
+      src={logoURL}
       alt={name}
     />}
     {title}

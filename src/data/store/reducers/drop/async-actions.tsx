@@ -106,8 +106,7 @@ const redefineURL = (url: string) => {
 const checkReceipt = async function (contractInstance: any, currentIndex: number): Promise<string> {
   return new Promise((resolve, reject) => {
     contractInstance.on('Claimed', (index: number, tokenId: string, amount: string, account: string, event: any) => { 
-      // resolve(res)
-      if (currentIndex === index) {
+      if (currentIndex === Number(index)) {
         const { transactionHash } = event
         resolve(transactionHash)
       }
