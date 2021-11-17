@@ -7,6 +7,7 @@ import ClaimingFinished from './claiming-finished'
 import ClaimingProcess from './claiming-process'
 import CheckEligibility from './check-eligibility'
 import { ScreenLoader } from 'components/common'
+import Page from '../page'
 
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
@@ -16,7 +17,6 @@ import { Dispatch } from 'redux';
 import * as dropAsyncActions from 'data/store/reducers/drop/async-actions'
 import { DropActions } from 'data/store/reducers/drop/types'
 import { TokenActions } from 'data/store/reducers/token/types'
-import checkEligibility from './check-eligibility'
 
 const mapStateToProps = ({
   user: { address, provider, chainId },
@@ -76,9 +76,11 @@ const ClaimPage: FC<ReduxType> = ({
       getData(provider, ipfs, chainId, address)
     }
   }, [])
-  return <Container>
-    {screen}
-  </Container> 
+  return <Page noHeader={step === 'check_eligibility'}>
+    <Container>
+      {screen}
+    </Container> 
+  </Page>
 }
 
 export default connect(mapStateToProps, mapDispatcherToProps)(ClaimPage)

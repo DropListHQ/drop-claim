@@ -9,11 +9,13 @@ import Icons from 'icons'
 import { ThemeProvider } from 'styled-components'
 import themes from 'themes'
 
-interface FooterProps {}
+interface FooterProps {
+	className?: string
+}
 
-const Footer: FC<FooterProps> = () => {
+const Footer: FC<FooterProps> = ({ className }) => {
 	return <ThemeProvider theme={themes.light}>
-		<FooterComponent>
+		<FooterComponent className={className}>
 			Powered by <span><Icons.LinkdropLogo /></span>
 		</FooterComponent>
 	</ThemeProvider>

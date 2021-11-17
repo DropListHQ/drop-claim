@@ -10,7 +10,9 @@ import { connect } from 'react-redux'
 
 interface PageProps {
   account?: string,
-  chainId?: number
+  chainId?: number,
+  children: React.ReactNode,
+  noHeader?: boolean
 }
 const mapStateToProps = ({
   drop: { step }
@@ -27,17 +29,17 @@ const defineTitle: IDefineTitle = step => {
   return '🔥 Get token 🔥'
 }
 
-const PageComponent: FC<PageProps & ReduxType> = ({ children, step }) => {
-  
+const PageComponent: FC<PageProps & ReduxType> = ({ children, step, noHeader = false }) => {
+  const contentHeight = noHeader ? 'calc(100vh - 72px)' : 'calc(100vh - 68px - 72px)'
   return (
     <ThemeProvider theme={themes.light}>
       <Page>
         <MainContent>
-          <Header
+          {!noHeader && <Header
             title={defineTitle(step)}
-          />
+          />}
           <Content>
-            <Scrollbar style={{ width: '100%', height: 'calc(100vh - 68px - 72px)' }}>
+            <Scrollbar style={{ width: '100%', height: contentHeight }}>
               {children}
             </Scrollbar>
           </Content>

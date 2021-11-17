@@ -7,6 +7,7 @@ import { ReactComponent as FaqMenuIcon } from './faq-menu-icon.svg';
 import { ReactComponent as DocsMenuIcon } from './docs-menu-icon.svg';
 import { ReactComponent as StarMenuIcon } from './star-menu-icon.svg';
 import { ReactComponent as BlueArrowIcon } from './blue-arrow-icon.svg';
+import { ReactComponent as ArrowIcon } from './arrow-icon.svg';
 
 const Icons = {
   EthereumLogo,
@@ -17,7 +18,8 @@ const Icons = {
   FaqMenuIcon,
   DocsMenuIcon,
   StarMenuIcon,
-  BlueArrowIcon
+  BlueArrowIcon,
+  ArrowIcon
 }
 
 export default Icons

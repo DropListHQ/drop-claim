@@ -6,7 +6,6 @@ import { Web3Provider } from '@ethersproject/providers'
 import { history } from 'data/store'
 import {
   NotFound,
-  Page,
   ClaimPage
 //   NotFound,
 //   ProtectedRoute,
@@ -69,12 +68,10 @@ const AppRouter: FC<ReduxType> = ({ setAddress, setProvider, setChainId, provide
   }
 
   return <Router history={history}>
-    <Page>
-      <Switch>
-        <Route path='/claim/:ipfs'><ClaimPage /></Route>
-        <Route path='*'><NotFound /></Route>
-      </Switch>
-    </Page>
+    <Switch>
+      <Route path='/claim/:ipfs'><ClaimPage /></Route>
+      <Route path='*'><NotFound /></Route>
+    </Switch>
   </Router>
 }
 

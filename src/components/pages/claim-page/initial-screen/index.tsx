@@ -14,9 +14,9 @@ import { TDropStep } from 'types'
 const mapStateToProps = ({
   token: { name, image },
   user: { address, provider },
-  drop: { proof, tokenId, amount, dropAddress, index }
+  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL }
 }: RootState) => ({
-  name, image, address, proof, tokenId, amount, dropAddress, provider, index
+  name, image, address, proof, tokenId, amount, dropAddress, provider, index, allowedAddressList, logoURL
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenActions>) => {
@@ -46,19 +46,27 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
 type ReduxType = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatcherToProps> 
 
 
-type TDefineTitle = (tokenName: string, address: string) => ReactElement 
-const defineTitle: TDefineTitle = (tokenName, address) => {
-  if (address) {
-    return <Title>Claim <strong>{tokenName}</strong> to address: <span>{address}</span> </Title>
+type TDefineTitle = (tokenName: string, address: string, allowedAddressList: string[]) => ReactElement 
+const defineTitle: TDefineTitle = (tokenName, address, allowedAddressList) => {
+  const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
+  const addressShorten = shortenString(address)
+  if (address && allowed) {
+    return <Title>Claim <strong>{tokenName}</strong> to address: <span>{addressShorten}</span></Title>
+  }
+  if (address && !allowed) {
+    return <Title>⚠️ You are not eligible to claim this drop ⚠️<br/>to address: <span>{addressShorten}</span></Title>
+  }
+  if (!address && !allowed) {
+    return <Title>⚠️ You are not eligible to claim this drop ⚠️</Title>
   }
   return <Title>Claim {tokenName}</Title>
 }
 
-const InitialScreen: FC<ReduxType> = ({ name, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
-  const title = defineTitle(name, shortenString(address))
-  return <>
-    {image && <TokenImage
-      src={image}
+const InitialScreen: FC<ReduxType> = ({ name, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
+  const title = defineTitle(name, address, allowedAddressList)
+  return <> 
+    {logoURL && <TokenImage
+      src={logoURL}
       alt={name}
     />}
     {title}

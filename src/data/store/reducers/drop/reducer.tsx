@@ -14,7 +14,8 @@ const initialState: DropState = {
   proof: [],
   index: 0,
   hash: null,
-  claims: {}
+  claims: {},
+  logoURL: null
 }
 
 export function dropReducer(
@@ -44,6 +45,8 @@ export function dropReducer(
           return {...state, index: action.payload.index }
         case Constants.DROP_SET_HASH:
           return {...state, hash: action.payload.hash }
+        case Constants.DROP_SET_LOGO_URL:
+          return {...state, logoURL: action.payload.logoURL }
         default:
             return state;
     }

@@ -17,7 +17,8 @@ export interface DropState {
   proof: string[],
   index: number,
   hash: null | string,
-  claims: TClaims
+  claims: TClaims,
+  logoURL: string | null
 }
 
 

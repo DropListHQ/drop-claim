@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react'
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
-import { ScreenInput, ScreenButton } from './styled-components'
+import { ScreenInput, ScreenButton, Title, Container, ScreenText, BackButton } from './styled-components'
 import { TDropStep } from 'types'
 import * as dropActions from 'data/store/reducers/drop/actions'
 import { Dispatch } from 'redux';
 import { DropActions } from 'data/store/reducers/drop/types'
+import Icons from 'icons'
 
 const mapStateToProps = ({
   user: { address },
@@ -25,8 +26,12 @@ type TStatus = 'default' | 'success' | 'error'
 const CheckEligibility: FC<ReduxType> = ({ address, allowedAddressList, stepStep }) => {
   const [ value, setValue ] = useState('')
   const [ status, setStatus ] = useState<TStatus>('default')
-  console.log({ allowedAddressList })
-  return <>
+  return <Container>
+    <BackButton
+      onClick={() => { return stepStep('initial') }}
+    ><Icons.ArrowIcon />Back</BackButton>
+    <Title>Check eligibility</Title>
+    <ScreenText>To check eligibility paste your address below:</ScreenText>
     <ScreenInput
       value={value}
       error={status === 'error' ? '😢 Sorry, you are not eligible for this drop' : undefined}
@@ -52,7 +57,7 @@ const CheckEligibility: FC<ReduxType> = ({ address, allowedAddressList, stepStep
       }}
       disabled={value.length !== 42}
     />
-  </>
+  </Container>
 }
 
 export default connect(mapStateToProps, mapDispatcherToProps)(CheckEligibility)
