@@ -17,7 +17,8 @@ export async function getData(
   provider: any,
 	ipfs: string,
   userChainId: number,
-  userAddress: string
+  userAddress: string,
+  history: any
 ) {
   dispatch(actionsDrop.setLoading(true))
   const { data } = await getIPFSData.get(ipfs)
@@ -70,6 +71,16 @@ export async function getData(
       if (isClaimed) {
         dispatch(actionsDrop.setLoading(false))
         return dispatch(actionsDrop.setStep('claiming_finished'))
+      }
+      const claimStarted = await dropContractInstance.claimStartedForToken(tokenId)
+      console.log({ claimStarted })
+      if (claimStarted) {
+        const tokensLeft = await dropContractInstance.tokensLeft(tokenId)
+        if (tokensLeft < Number(amount)) {
+          dispatch(actionsDrop.setLoading(false))
+          // return dispatch(actionsDrop.setStep('no_tokens_left'))
+          return history.push('/campaign-finished')
+        }
       }
     }
   }
