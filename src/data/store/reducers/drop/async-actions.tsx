@@ -54,7 +54,7 @@ export async function getData(
   dispatch(actionsDrop.setLogoURL(logoURL))
 
   if (claims[userAddress]) {
-    const { amount, tokenId, proof, index } = claims[userAddress]
+    const { amount, tokenId, proof, index, maxSupply } = claims[userAddress]
     const { name, image, description } = await getTokenData(provider, tokenAddress, tokenId)
     dispatch(actionsToken.setImage(redefineURL(image)))
     dispatch(actionsToken.setName(name))
@@ -62,7 +62,8 @@ export async function getData(
     dispatch(actionsDrop.setAmount(amount))
     dispatch(actionsDrop.setTokenId(tokenId))
     dispatch(actionsDrop.setProof(proof))
-    dispatch(actionsDrop.setIndex(index)) 
+    dispatch(actionsDrop.setIndex(index))
+    dispatch(actionsDrop.setMaxSupply(maxSupply))
     if (dropAddress) {
       const dropContractInstance = new ethers.Contract(dropAddress, RetroDropContract, provider)
       const isClaimed = await dropContractInstance.isClaimed(index)
@@ -131,17 +132,19 @@ export async function claim(
   provider: any,
 	index: number,
   amount: string,
+  maxSupply: string,
   address: string,
   tokenId: string,
   dropAddress: string,
   merkleProof: string[],
 ) {
-  console.log({ index, amount, address, dropAddress, merkleProof })
+  console.log({ index, tokenId, amount, maxSupply, address, merkleProof })
   try {
     const signer = await provider.getSigner()
     const contractInstanceSigner = new ethers.Contract(dropAddress, RetroDropContract, signer)
     const contractInstanceProvider = new ethers.Contract(dropAddress, RetroDropContract, provider)
-    const result = await contractInstanceSigner.claim(index, tokenId, amount, address, merkleProof)
+    console.log(contractInstanceSigner.claim)
+    const result = await contractInstanceSigner.claim(index, tokenId, amount, maxSupply, address, merkleProof)
     dispatch(actionsDrop.setStep('claiming_process'))
     const { hash } = result
     dispatch(actionsDrop.setHash(hash))

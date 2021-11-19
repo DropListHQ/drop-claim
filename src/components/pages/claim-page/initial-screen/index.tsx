@@ -14,9 +14,9 @@ import { TDropStep } from 'types'
 const mapStateToProps = ({
   token: { name, image },
   user: { address, provider },
-  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL }
+  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, maxSupply }
 }: RootState) => ({
-  name, image, address, proof, tokenId, amount, dropAddress, provider, index, allowedAddressList, logoURL
+  name, image, address, proof, tokenId, amount, dropAddress, provider, index, allowedAddressList, logoURL, maxSupply
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenActions>) => {
@@ -26,6 +26,7 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         proof: string[],
         tokenId: string,
         amount: string,
+        maxSupply: string,
         dropAddress: string,
         provider: any,
         index: number
@@ -34,6 +35,7 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         provider,
         index,
         amount,
+        maxSupply,
         address,
         tokenId,
         dropAddress,
@@ -61,7 +63,7 @@ const defineTitle: TDefineTitle = (tokenName, address, allowed) => {
   return <Title>Claim {tokenName}</Title>
 }
 
-const InitialScreen: FC<ReduxType> = ({ name, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
+const InitialScreen: FC<ReduxType> = ({ name, maxSupply, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
   const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
   const title = defineTitle(name, address, allowed)
   return <> 
@@ -74,8 +76,8 @@ const InitialScreen: FC<ReduxType> = ({ name, allowedAddressList, logoURL, image
       disabled={!tokenId || !amount || !allowed}
       title='Claim'
       onClick={() => {
-        if (!tokenId || !amount) { return }
-        claim(address, proof, tokenId, amount, dropAddress, provider, index)
+        if (!tokenId || !amount || !maxSupply) { return }
+        claim(address, proof, tokenId, amount, maxSupply, dropAddress, provider, index)
       }}
     />
     <TextComponent

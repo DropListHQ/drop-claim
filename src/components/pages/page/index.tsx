@@ -24,7 +24,7 @@ type ReduxType = ReturnType<typeof mapStateToProps>
 type IDefineTitle = (step: string) => string
 const defineTitle: IDefineTitle = step => {
   if (step === 'claiming_finished') { return '🔥 NFT is yours 🔥' }
-  if (step === 'claiming_process' || 'set_connector') { return '' }
+  if (step === 'claiming_process' || step ===  'set_connector') { return '' }
   if (step === 'check_eligibility') { return 'Check eligibility' }
   return '🔥 Get token 🔥'
 }
