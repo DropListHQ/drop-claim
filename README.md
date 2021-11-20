@@ -1,4 +1,4 @@
-# Getting Started With Linkdrop Dashboard
+# Getting Started With App
 ## Available Scripts
 In the project directory, you can run:
 ### `yarn start`
