@@ -5,6 +5,7 @@ type TDropStep = 'loading' |
                  'claiming_finished' |
                  'claiming_process' |
                  'check_eligibility' |
-                 'set_connector'
+                 'set_connector' |
+                 'no_tokens_left'
 
 export default TDropStep

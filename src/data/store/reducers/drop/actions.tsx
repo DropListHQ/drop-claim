@@ -55,7 +55,10 @@ export function setClaims (claims: TClaims) {
   return action(Constants.DROP_SET_CLAIMS, { claims })
 }
 
-
 export function setLogoURL (logoURL: string) {
   return action(Constants.DROP_SET_LOGO_URL, { logoURL })
+}
+
+export function setMaxSupply (maxSupply: string) {
+  return action(Constants.DROP_SET_MAX_SUPPLY, { maxSupply })
 }

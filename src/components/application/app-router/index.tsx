@@ -1,13 +1,13 @@
 import React, { useEffect, FC } from 'react'
 import { Route, Switch, Router } from 'react-router-dom'
 // import { functionalActions } from 'decorators'
-import Web3Modal from "web3modal";
 import { Web3Provider } from '@ethersproject/providers'
 import { history } from 'data/store'
 import { ScreenLoader } from 'components/common'
 import {
   NotFound,
-  ClaimPage
+  ClaimPage,
+  CampaignFinished
 //   NotFound,
 //   ProtectedRoute,
 //   Authorize
@@ -21,7 +21,7 @@ import { RootState } from 'data/store';
 
 
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { Web3ReactProvider, useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
+import { useWeb3React } from '@web3-react/core'
 
 const injected = new InjectedConnector({ supportedChainIds: [1, 3, 4, 5, 42] })
 
@@ -103,6 +103,7 @@ const AppRouter: FC<ReduxType> = ({ setAddress, setProvider, setChainId, provide
   return <Router history={history}>
     <Switch>
       <Route path='/claim/:ipfs'><ClaimPage /></Route>
+      <Route path='/campaign-finished'><CampaignFinished /></Route>
       <Route path='*'><NotFound /></Route>
     </Switch>
   </Router>

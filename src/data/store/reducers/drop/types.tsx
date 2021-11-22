@@ -18,7 +18,8 @@ export interface DropState {
   index: number,
   hash: null | string,
   claims: TClaims,
-  logoURL: string | null
+  logoURL: string | null,
+  maxSupply: string | null
 }
 
 

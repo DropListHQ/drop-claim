@@ -7,9 +7,11 @@ import ClaimingFinished from './claiming-finished'
 import ClaimingProcess from './claiming-process'
 import CheckEligibility from './check-eligibility'
 import SetConnector from './set-connector'
+import NoTokensLeft from './no-tokens-left'
 import { ScreenLoader } from 'components/common'
 import Page from '../page'
 import { TDropStep } from 'types'
+import { useHistory } from 'react-router-dom'
 
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
@@ -36,8 +38,9 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         provider: any,
         ipfs: string,
         chainId: number,
-        address: string
-      ) => dropAsyncActions.getData(dispatch, provider, ipfs, chainId, address),
+        address: string,
+        history: any
+      ) => dropAsyncActions.getData(dispatch, provider, ipfs, chainId, address, history),
       setStep: (step: TDropStep) => dispatch(dropActions.setStep(step))
   }
 }
@@ -62,6 +65,8 @@ const defineCurrentScreen: TDefineStep = step => {
       return <CheckEligibility />
     case 'set_connector':
       return <SetConnector />
+    case 'no_tokens_left':
+      return <NoTokensLeft />
     default:
       return <ScreenLoader />
   }
@@ -77,13 +82,14 @@ const ClaimPage: FC<ReduxType> = ({
 }) => {
   const { ipfs }: { ipfs: string } = useParams()
   const screen = defineCurrentScreen(step)
+  const history = useHistory()
   useEffect(() => {
     if (provider === null) { setStep('set_connector') }
     if (chainId && provider) {
-      console.log('getting data')
-      getData(provider, ipfs, chainId, address)
+      getData(provider, ipfs, chainId, address, history)
     }
   }, [provider, address, chainId])
+  
   return <Page noHeader={step === 'check_eligibility'}>
     <Container>
       {screen}
