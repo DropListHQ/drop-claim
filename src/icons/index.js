@@ -1,6 +1,5 @@
 import { ReactComponent as EthereumLogo } from './ethereum-logo.svg';
-import { ReactComponent as LinkdropLogo } from './linkdrop-logo.svg';
-import { ReactComponent as LinkdropTextLogo } from './linkdrop-text-logo.svg';
+import { ReactComponent as DroplistLogo } from './droplist-logo.svg';
 import { ReactComponent as DashboardMenuIcon } from './dashboard-menu-icon.svg';
 import { ReactComponent as SupportMenuIcon } from './support-menu-icon.svg';
 import { ReactComponent as FaqMenuIcon } from './faq-menu-icon.svg';
@@ -11,8 +10,7 @@ import { ReactComponent as ArrowIcon } from './arrow-icon.svg';
 
 const Icons = {
   EthereumLogo,
-  LinkdropLogo,
-  LinkdropTextLogo,
+  DroplistLogo,
   DashboardMenuIcon,
   SupportMenuIcon,
   FaqMenuIcon,

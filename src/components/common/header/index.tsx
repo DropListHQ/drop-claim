@@ -1,18 +1,27 @@
 import React, { FC } from 'react'
+import { shortenString } from 'helpers'
 import {
-    Header
+    Header,
+		Address,
+		AddressIndicator,
+		Logo
 } from './styled-components'
 import { ThemeProvider } from 'styled-components'
 import themes from 'themes'
 
 interface Props {
-  title: string
+  title: string | React.ReactNode;
+	address: string;
 }
 
-const HeaderComponent: FC<Props> = ({ title }) => {
+const HeaderComponent: FC<Props> = ({ title, address }) => {
 	return <ThemeProvider theme={themes.light}>
-		<Header>
-			{title}
+		<Header withAddress={Boolean(address)}>
+			<Logo>{title}</Logo>
+			{address && <Address>
+				<AddressIndicator />
+				{shortenString(address)}
+			</Address>}
 		</Header>
 	</ThemeProvider>
 }

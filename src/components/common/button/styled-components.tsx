@@ -18,13 +18,14 @@ export const Button = styled.button.attrs(props => ({
 }))<ButtonProps>`
   background-color: ${props => props.theme.buttonDefaultColor};
   color: ${props => props.theme.secondaryTextColor};
-  font-size: 16px;
+  font-size: 12px;
   cursor: pointer;
   padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  font-weight: 700;
+  border-radius: 20px;
   transition: color .3s, background-color .3s;
   border: 2px solid ${props => props.theme.buttonDefaultColor};
 
