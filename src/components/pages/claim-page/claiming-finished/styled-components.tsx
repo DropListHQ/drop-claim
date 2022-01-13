@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Button } from 'components/common'
+import { Button, TokenImage } from 'components/common'
 
 export const Title = styled.h2`
   font-size: 14px;
@@ -15,7 +15,8 @@ export const Title = styled.h2`
   }
 
   span {
-    color: ${props => props.theme.primaryHighlightColor}
+    color: ${props => props.theme.primaryHighlightColor};
+    font-weight: 700;
   }
 `
 
@@ -27,4 +28,12 @@ type TScreenButton = {
 export const ScreenButton = styled(Button)<TScreenButton>`
   max-width: 270px;
   width: 100%;
+`
+
+export const TokenImageHuge = styled(TokenImage)`
+  width: 340px;
+  height: 340px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
 `

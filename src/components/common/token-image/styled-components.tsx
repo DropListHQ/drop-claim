@@ -5,8 +5,9 @@ type TProps = {
   alt: string
 }
 export const TokenImage = styled.img<TProps>`
-  width: 300px;
-  height: 300px;
-  object-fit: contain;
-  border-radius: 8px;
+  width: 343px;
+  height: 282px;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
 `

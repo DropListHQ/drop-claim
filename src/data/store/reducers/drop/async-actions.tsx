@@ -22,12 +22,11 @@ export async function getData(
 ) {
   dispatch(actionsDrop.setLoading(true))
   const { data } = await getIPFSData.get(ipfs)
-  const { chainId, tokenAddress, claims, title, logoURL } = data
+  const { chainId, tokenAddress, claims, title, logoURL, description } = data
   const allowedAddressList = Object.keys(claims)
   dispatch(actionsDrop.setChainId(chainId))
   dispatch(actionsDrop.setTokenAddress(tokenAddress))
   dispatch(actionsDrop.setAllowedAddressList(allowedAddressList))
-  
   
 
   if (chainId !== userChainId) {
@@ -51,6 +50,7 @@ export async function getData(
   }
 
   dispatch(actionsDrop.setTitle(title))
+  dispatch(actionsDrop.setDescription(description))
   dispatch(actionsDrop.setClaims(claims))
   dispatch(actionsDrop.setLogoURL(logoURL))
 

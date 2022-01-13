@@ -9,6 +9,7 @@ import TokenImage from './token-image'
 import ScreenLoader from './screen-loader'
 import Text from './text'
 import FramedIcon from './framed-icon'
+import Widget from './widget'
 
 export {
   Header,
@@ -21,5 +22,6 @@ export {
   TokenImage,
   ScreenLoader,
   Text,
-  FramedIcon
+  FramedIcon,
+  Widget
 }

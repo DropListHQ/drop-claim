@@ -1,7 +1,6 @@
-import React, { FC, ReactElement } from 'react'
-import { TokenImage } from 'components/common'
-import { Title, ScreenButton, TextComponent, IconComponent } from './styled-components'
-import { shortenString } from 'helpers'
+import React, { FC } from 'react'
+import { TokenImage, Widget } from 'components/common'
+import { Title, ScreenButton, TextComponent, IconComponent, Description } from './styled-components'
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
 import { DropActions } from 'data/store/reducers/drop/types'
@@ -14,9 +13,9 @@ import { TDropStep } from 'types'
 const mapStateToProps = ({
   token: { name, image },
   user: { address, provider },
-  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, maxSupply }
+  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, maxSupply, description, title }
 }: RootState) => ({
-  name, image, address, proof, tokenId, amount, dropAddress, provider, index, allowedAddressList, logoURL, maxSupply
+  name, image, address, proof, tokenId, amount, dropAddress, provider, index, title, allowedAddressList, logoURL, maxSupply, description
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenActions>) => {
@@ -48,30 +47,16 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
 type ReduxType = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatcherToProps> 
 
 
-type TDefineTitle = (tokenName: string, address: string, allowed: boolean) => ReactElement 
-const defineTitle: TDefineTitle = (tokenName, address, allowed) => {
-  const addressShorten = shortenString(address)
-  if (address && allowed) {
-    return <Title>Claim <strong>{tokenName}</strong> to address: <span>{addressShorten}</span></Title>
-  }
-  if (address && !allowed) {
-    return <Title>⚠️ You are not eligible to claim this drop ⚠️<br/>to address: <span>{addressShorten}</span></Title>
-  }
-  if (!address && !allowed) {
-    return <Title>⚠️ You are not eligible to claim this drop ⚠️</Title>
-  }
-  return <Title>Claim {tokenName}</Title>
-}
-
-const InitialScreen: FC<ReduxType> = ({ name, maxSupply, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
+const InitialScreen: FC<ReduxType> = ({ name, title, description, maxSupply, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
   const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
-  const title = defineTitle(name, address, allowed)
-  return <> 
-    {logoURL && <TokenImage
-      src={logoURL}
-      alt={name}
-    />}
-    {title}
+  return <Widget
+      image={logoURL && <TokenImage
+        src={logoURL}
+        alt={name}
+      />}
+    > 
+    <Title>{title}</Title>
+    <Description>{description}</Description>
     <ScreenButton
       disabled={!tokenId || !amount || !allowed}
       title='Claim'
@@ -86,7 +71,7 @@ const InitialScreen: FC<ReduxType> = ({ name, maxSupply, allowedAddressList, log
         stepStep('check_eligibility')
       }}
     >Check here if you are eligible<br />for this RetroDrop<IconComponent /></TextComponent>
-  </>
+  </Widget>
 }
 
 export default connect(mapStateToProps, mapDispatcherToProps)(InitialScreen)

@@ -10,8 +10,9 @@ export const Container = styled.div`
   text-align: center;
 `
 
-export const Loader = styled(ScreenLoader)`
-    margin-bottom: 40px;
+export const Loader = styled.div`
+  margin-bottom: 40px;
+  transform: rotate(30deg);
 `
 
 export const ScreenTitle = styled(Title)`

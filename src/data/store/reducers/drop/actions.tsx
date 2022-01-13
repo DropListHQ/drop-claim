@@ -27,6 +27,10 @@ export function setAmount (amount: string) {
   return action(Constants.DROP_SET_AMOUNT, { amount })
 }
 
+export function setDescription (description: string) {
+  return action(Constants.DROP_SET_DESCRIPTION, { description })
+}
+
 export function setTitle (title: string) {
   return action(Constants.DROP_SET_TITLE, { title })
 }

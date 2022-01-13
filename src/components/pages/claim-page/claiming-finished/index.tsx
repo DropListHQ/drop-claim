@@ -1,9 +1,8 @@
 import React, { FC, ReactElement } from 'react'
 import { RootState } from 'data/store'
 import { connect } from 'react-redux'
-import { TokenImage } from 'components/common'
 import { shortenString, defineNetworkName } from 'helpers'
-import { Title, ScreenButton } from './styled-components'
+import { Title, ScreenButton, TokenImageHuge } from './styled-components'
 
 const mapStateToProps = ({
   drop: { hash, chainId, tokenId, tokenAddress, logoURL },
@@ -34,7 +33,7 @@ const defineOpenseaURL: TDefineOpenseaUrl = ({ chainId, tokenId, tokenAddress })
 
 const defineTitle: TDefineTitle = (tokenName, address) => {
   if (address) {
-    return <Title><strong>{tokenName}</strong> has been claimed<br />to address: <span>{address}</span> </Title>
+    return <Title>Congrats! <strong>{tokenName}</strong> has been claimed 🔥 to address: <span>{address}</span> </Title>
   }
   return <Title><strong>{tokenName}</strong> has been claimed</Title>
 }
@@ -42,18 +41,21 @@ const defineTitle: TDefineTitle = (tokenName, address) => {
 const ClaimingFinished: FC<ReduxType> = ({ image, name, address, chainId, tokenId, tokenAddress, logoURL }) => {
   const title = defineTitle(name, shortenString(address))
   return <>
-    {logoURL && <TokenImage
+    {logoURL && <TokenImageHuge
       src={logoURL}
       alt={name}
     />}
     {title}
-    {chainId && tokenId && tokenAddress && <ScreenButton title='View NFT on OpenSea' appearance='inverted' onClick={() => {
-      window.open(defineOpenseaURL({
-        chainId,
-        tokenId,
-        tokenAddress
-      }))
-    }}/>}
+    {chainId && tokenId && tokenAddress && <ScreenButton
+      title='View NFT on OpenSea'
+      onClick={() => {
+        window.open(defineOpenseaURL({
+          chainId,
+          tokenId,
+          tokenAddress
+        }))
+      }}
+    />}
   </>
 }
 

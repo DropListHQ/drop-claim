@@ -5,15 +5,15 @@ const themes = {
 		disabledTextColor: '#DFE0EB', // disabled color of text
 		dangerTextColor: '#FF2C2C', // danger color of text
 		noteTextColor: '#C5C7CD', // note color of text
-		primaryBorderColor: '#DFE0EB',
+		primaryBorderColor: '#E4E4E4',
 		secondaryBorderColor: '#FFF',
 		primaryColor: '#F7F8FC', // main color of bg
 		secondaryColor: '#363740', // secondary coplor of bg
-		blankColor: '#FFF', // secondary coplor of bg
+		blankColor: '#FAFAFA', // secondary coplor of bg
 		menuItemActive: '#3E4049',
 		primaryHighlightColor: '#2B32EA',
 		loaderPrimaryColor: '#000',
-
+		widgetColor: '#FFF',
 		buttonDefaultColor: '#2B32EA',
 		buttonDisabledColor: '#DFE0EB',
 		buttonHoverColor: '#4047EC',
@@ -24,6 +24,7 @@ const themes = {
 		tagDefaultColor: '#DFE0EB',
 		tagErrorColor: '#FF2C2C',
 		tagInfoColor: '#2B32EA',
+		tagSuccessColor: '#21F142'
 	},
 	dark: {
 		primaryTextColor: 'red',

@@ -14,6 +14,6 @@ export const FooterComponent = styled.footer`
   font-weight: 700;
   color: ${props => props.theme.primaryTextColor};
   span {
-    margin-left: 6px;
+    margin: 0 6px;
   }
 `

@@ -16,7 +16,7 @@ interface FooterProps {
 const Footer: FC<FooterProps> = ({ className }) => {
 	return <ThemeProvider theme={themes.light}>
 		<FooterComponent className={className}>
-			Powered by <span><Icons.LinkdropLogo /></span>
+			Powered by <span><Icons.DroplistLogo /></span> DropList
 		</FooterComponent>
 	</ThemeProvider>
 }
