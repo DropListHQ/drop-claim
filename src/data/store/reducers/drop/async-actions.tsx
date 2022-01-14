@@ -149,15 +149,10 @@ export async function claim(
   dropAddress: string,
   merkleProof: string[],
 ) {
-  console.log({ index, tokenId, amount, maxSupply, address, merkleProof })
   try {
-    const signer = await provider.getSigner()
-    const contractInstanceSigner = new ethers.Contract(dropAddress, RetroDropContract, signer)
     const contractInstanceProvider = new ethers.Contract(dropAddress, RetroDropContract, provider)
-    console.log(contractInstanceSigner.claim)
-    const result = await contractInstanceSigner.claim(index, tokenId, amount, maxSupply, address, merkleProof)
     dispatch(actionsDrop.setStep('claiming_process'))
-    const { hash } = result
+    const hash = await claimTokens(provider, index, amount, maxSupply, address, tokenId, dropAddress, merkleProof)
     dispatch(actionsDrop.setHash(hash))
     const updatedHash = await checkReceipt(contractInstanceProvider, index)
     if (updatedHash) {
@@ -167,4 +162,21 @@ export async function claim(
   } catch (err) {
     console.log(err)
   }
+}
+
+const claimTokens = async (
+  provider: any,
+	index: number,
+  amount: string,
+  maxSupply: string,
+  address: string,
+  tokenId: string,
+  dropAddress: string,
+  merkleProof: string[],
+) => {
+  const signer = await provider.getSigner()
+  const contractInstanceSigner = new ethers.Contract(dropAddress, RetroDropContract, signer)
+  const result = await contractInstanceSigner.claim(index, tokenId, amount, maxSupply, address, merkleProof)
+  const { hash } = result
+  return hash
 }
