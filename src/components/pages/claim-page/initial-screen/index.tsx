@@ -13,9 +13,9 @@ import { TDropStep } from 'types'
 const mapStateToProps = ({
   token: { name, image },
   user: { address, provider },
-  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, maxSupply, description, title }
+  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, description, title }
 }: RootState) => ({
-  name, image, address, proof, tokenId, amount, dropAddress, provider, index, title, allowedAddressList, logoURL, maxSupply, description
+  name, image, address, proof, tokenId, amount, dropAddress, provider, index, title, allowedAddressList, logoURL, description
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenActions>) => {
@@ -25,7 +25,6 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         proof: string[],
         tokenId: string,
         amount: string,
-        maxSupply: string,
         dropAddress: string,
         provider: any,
         index: number
@@ -34,7 +33,6 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         provider,
         index,
         amount,
-        maxSupply,
         address,
         tokenId,
         dropAddress,
@@ -47,7 +45,7 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
 type ReduxType = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatcherToProps> 
 
 
-const InitialScreen: FC<ReduxType> = ({ name, title, description, maxSupply, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
+const InitialScreen: FC<ReduxType> = ({ name, title, description, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
   const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
   return <Widget
       image={logoURL && <TokenImage
@@ -61,8 +59,8 @@ const InitialScreen: FC<ReduxType> = ({ name, title, description, maxSupply, all
       disabled={!tokenId || !amount || !allowed}
       title='Claim'
       onClick={() => {
-        if (!tokenId || !amount || !maxSupply) { return }
-        claim(address, proof, tokenId, amount, maxSupply, dropAddress, provider, index)
+        if (!tokenId || !amount) { return }
+        claim(address, proof, tokenId, amount, dropAddress, provider, index)
       }}
     />
     <TextComponent

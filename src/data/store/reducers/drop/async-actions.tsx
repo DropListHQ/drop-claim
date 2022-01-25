@@ -2,15 +2,16 @@
 import { Dispatch } from 'redux';
 import * as actionsDrop from './actions';
 import * as actionsToken from '../token/actions';
-
-
 import { DropActions } from './types';
 import { TokenActions } from '../token/types';
 import { getIPFSData, getERC1155TokenData } from 'data/api'
 import { ethers } from 'ethers'
-import { ERC1155Contract, RetroDropContract, RetroDropFactory } from 'abi'
+import { ERC1155Contract } from 'abi'
+import { DropInterfaceERC1155, DropFactoryInterface } from '@drop-protocol/drop-sdk'
+ import contracts from 'configs/contracts'
+import { hexlifyIpfsHash } from 'helpers'
+
 const ipfsGatewayUrl = 'https://gateway.pinata.cloud/ipfs/'
-const { REACT_APP_FACTORY_ADDRESS, REACT_APP_TEMPLATE_ADDRESS } = process.env
 
 export async function getData(
 	dispatch: Dispatch<DropActions> & Dispatch<TokenActions>,
@@ -23,7 +24,15 @@ export async function getData(
   dispatch(actionsDrop.setLoading(true))
   const { data } = await getIPFSData.get(ipfs)
   const { chainId, tokenAddress, claims, title, logoURL, description } = data
+  const contractData = contracts[chainId]
+
+  const type = 'erc1155'
+
+	const factoryAddress = contractData.factory
+	const templateAddress = contractData[type]
+
   const allowedAddressList = Object.keys(claims)
+
   dispatch(actionsDrop.setChainId(chainId))
   dispatch(actionsDrop.setTokenAddress(tokenAddress))
   dispatch(actionsDrop.setAllowedAddressList(allowedAddressList))
@@ -41,11 +50,9 @@ export async function getData(
 
   let dropAddress: string = '' 
 
-  if (REACT_APP_FACTORY_ADDRESS) {
-    const salt = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(ipfs))
-    const factoryContractInstance = new ethers.Contract(REACT_APP_FACTORY_ADDRESS, RetroDropFactory, provider)
-    dropAddress = await factoryContractInstance.predictDropAddress(REACT_APP_TEMPLATE_ADDRESS, salt)
-    console.log({ dropAddress })
+  if (factoryAddress) {
+    const factoryContractInstance = new ethers.Contract(factoryAddress, DropFactoryInterface, provider)
+    dropAddress = await factoryContractInstance.getDrop(hexlifyIpfsHash(ipfs))
     dispatch(actionsDrop.setDropAddress(dropAddress))
   }
 
@@ -55,7 +62,7 @@ export async function getData(
   dispatch(actionsDrop.setLogoURL(logoURL))
 
   if (claims[userAddress]) {
-    const { amount, tokenId, proof, index, maxSupply } = claims[userAddress]
+    const { amount, tokenId, proof, index } = claims[userAddress]
     const { name, image, description } = await getTokenData(provider, tokenAddress, tokenId)
     dispatch(actionsToken.setImage(redefineURL(image)))
     dispatch(actionsToken.setName(name))
@@ -64,23 +71,14 @@ export async function getData(
     dispatch(actionsDrop.setTokenId(tokenId))
     dispatch(actionsDrop.setProof(proof))
     dispatch(actionsDrop.setIndex(index))
-    dispatch(actionsDrop.setMaxSupply(maxSupply))
     if (dropAddress) {
-      const dropContractInstance = new ethers.Contract(dropAddress, RetroDropContract, provider)
+      const dropContractInstance = new ethers.Contract(dropAddress, DropInterfaceERC1155, provider)
+      
       const isClaimed = await dropContractInstance.isClaimed(index)
+      console.log({ isClaimed })
       if (isClaimed) {
         dispatch(actionsDrop.setLoading(false))
         return dispatch(actionsDrop.setStep('claiming_finished'))
-      }
-      const claimStarted = await dropContractInstance.claimStartedForToken(tokenId)
-      console.log({ claimStarted })
-      if (claimStarted) {
-        const tokensLeft = await dropContractInstance.tokensLeft(tokenId)
-        if (tokensLeft < Number(amount)) {
-          dispatch(actionsDrop.setLoading(false))
-          // return dispatch(actionsDrop.setStep('no_tokens_left'))
-          return history.push('/campaign-finished')
-        }
       }
     }
   }
@@ -117,7 +115,7 @@ const redefineURL = (url: string) => {
 
 const checkReceipt = async function (contractInstance: any, currentIndex: number): Promise<string> {
   return new Promise((resolve, reject) => {
-    contractInstance.on('Claimed', (index: number, tokenId: string, amount: string, account: string, event: any) => { 
+    contractInstance.on('ClaimedERC1155', (index: number, account: string, tokenId: string, amount: string, event: any) => { 
       if (currentIndex === Number(index)) {
         const { transactionHash } = event
         resolve(transactionHash)
@@ -143,21 +141,15 @@ export async function claim(
   provider: any,
 	index: number,
   amount: string,
-  maxSupply: string,
   address: string,
   tokenId: string,
   dropAddress: string,
   merkleProof: string[],
 ) {
-  console.log({ index, tokenId, amount, maxSupply, address, merkleProof })
   try {
-    const signer = await provider.getSigner()
-    const contractInstanceSigner = new ethers.Contract(dropAddress, RetroDropContract, signer)
-    const contractInstanceProvider = new ethers.Contract(dropAddress, RetroDropContract, provider)
-    console.log(contractInstanceSigner.claim)
-    const result = await contractInstanceSigner.claim(index, tokenId, amount, maxSupply, address, merkleProof)
+    const contractInstanceProvider = new ethers.Contract(dropAddress, DropInterfaceERC1155, provider)
     dispatch(actionsDrop.setStep('claiming_process'))
-    const { hash } = result
+    const hash = await claimTokens(provider, index, amount, address, tokenId, dropAddress, merkleProof)
     dispatch(actionsDrop.setHash(hash))
     const updatedHash = await checkReceipt(contractInstanceProvider, index)
     if (updatedHash) {
@@ -167,4 +159,20 @@ export async function claim(
   } catch (err) {
     console.log(err)
   }
+}
+
+const claimTokens = async (
+  provider: any,
+	index: number,
+  amount: string,
+  address: string,
+  tokenId: string,
+  dropAddress: string,
+  merkleProof: string[],
+) => {
+  const signer = await provider.getSigner()
+  const contractInstanceSigner = new ethers.Contract(dropAddress, DropInterfaceERC1155, signer)
+  const result = await contractInstanceSigner.claim(index, address, tokenId, amount, merkleProof)
+  const { hash } = result
+  return hash
 }

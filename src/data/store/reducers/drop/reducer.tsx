@@ -16,7 +16,6 @@ const initialState: DropState = {
   hash: null,
   claims: {},
   logoURL: null,
-  maxSupply: null,
   description: null
 }
 
@@ -49,8 +48,6 @@ export function dropReducer(
           return {...state, hash: action.payload.hash }
         case Constants.DROP_SET_LOGO_URL:
           return {...state, logoURL: action.payload.logoURL }
-        case Constants.DROP_SET_MAX_SUPPLY:
-          return {...state, maxSupply: action.payload.maxSupply }
         case Constants.DROP_SET_DESCRIPTION:
           return {...state, description: action.payload.description }
         default:
