@@ -41,8 +41,8 @@ const defineTitle: TDefineTitle = (tokenName, address) => {
 const ClaimingFinished: FC<ReduxType> = ({ image, name, address, chainId, tokenId, tokenAddress, logoURL }) => {
   const title = defineTitle(name, shortenString(address))
   return <>
-    {logoURL && <TokenImageHuge
-      src={logoURL}
+    {image && <TokenImageHuge
+      src={image}
       alt={name}
     />}
     {title}
