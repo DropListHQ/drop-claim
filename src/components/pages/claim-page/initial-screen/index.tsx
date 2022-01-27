@@ -13,14 +13,14 @@ import { TDropStep } from 'types'
 const mapStateToProps = ({
   token: { name, image },
   user: { address, provider },
-  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, description, title }
+  drop: { proof, tokenId, amount, dropAddress, index, allowedAddressList, logoURL, description, title, type }
 }: RootState) => ({
-  name, image, address, proof, tokenId, amount, dropAddress, provider, index, title, allowedAddressList, logoURL, description
+  name, image, type, address, proof, tokenId, amount, dropAddress, provider, index, title, allowedAddressList, logoURL, description
 })
 
 const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenActions>) => {
   return {
-      claim: (
+      claimERC1155: (
         address: string,
         proof: string[],
         tokenId: string,
@@ -28,11 +28,27 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         dropAddress: string,
         provider: any,
         index: number
-      ) => dropAsyncActions.claim(
+      ) => dropAsyncActions.claimERC1155(
         dispatch,
         provider,
         index,
         amount,
+        address,
+        tokenId,
+        dropAddress,
+        proof
+      ),
+      claimERC721: (
+        address: string,
+        proof: string[],
+        tokenId: string,
+        dropAddress: string,
+        provider: any,
+        index: number
+      ) => dropAsyncActions.claimERC721(
+        dispatch,
+        provider,
+        index,
         address,
         tokenId,
         dropAddress,
@@ -45,7 +61,24 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
 type ReduxType = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatcherToProps> 
 
 
-const InitialScreen: FC<ReduxType> = ({ name, title, description, allowedAddressList, logoURL, image, address, proof, tokenId, amount, dropAddress, provider, index, claim, stepStep }) => {
+const InitialScreen: FC<ReduxType> = ({
+  name,
+  title,
+  description,
+  allowedAddressList,
+  logoURL,
+  type,
+  address,
+  proof,
+  tokenId,
+  amount,
+  dropAddress,
+  provider,
+  index,
+  claimERC1155,
+  claimERC721,
+  stepStep
+}) => {
   const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
   return <Widget
       image={logoURL && <TokenImage
@@ -56,11 +89,21 @@ const InitialScreen: FC<ReduxType> = ({ name, title, description, allowedAddress
     <Title>{title}</Title>
     <Description>{description}</Description>
     <ScreenButton
-      disabled={!tokenId || !amount || !allowed}
+      disabled={
+        (type === 'erc1155' && (!tokenId || !amount || !allowed)) ||
+        (type === 'erc721' && (!tokenId || !allowed))
+      }
       title='Claim'
       onClick={() => {
-        if (!tokenId || !amount) { return }
-        claim(address, proof, tokenId, amount, dropAddress, provider, index)
+        console.log({ type })
+        if (type === 'erc1155' && tokenId && amount) {
+          return claimERC1155(address, proof, tokenId, amount, dropAddress, provider, index)
+        }
+        if (type === 'erc721' && tokenId) {
+          
+          return claimERC721(address, proof, tokenId, dropAddress, provider, index)
+        }
+        
       }}
     />
     <TextComponent

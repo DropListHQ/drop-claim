@@ -6,6 +6,7 @@ import defineJSONRpcUrl from './define-json-rpc-url'
 import getHashVariables from './get-hash-variables'
 import defineExplorerURL from './define-explorer-url'
 import hexlifyIpfsHash from './hexlify-ipfs-hash'
+import IPFSRedefineUrl from './ipfs-redefine-url'
 
 export {
   shortenString,
@@ -15,5 +16,6 @@ export {
   defineJSONRpcUrl,
   getHashVariables,
   defineExplorerURL,
-  hexlifyIpfsHash
+  hexlifyIpfsHash,
+  IPFSRedefineUrl
 }

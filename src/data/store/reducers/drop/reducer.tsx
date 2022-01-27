@@ -1,6 +1,6 @@
 import { DropState, DropActions } from './types';
 import { Constants } from './constants';
-
+console.log({ Constants })
 const initialState: DropState = {
   step: 'loading',
   loading: false,
@@ -16,7 +16,8 @@ const initialState: DropState = {
   hash: null,
   claims: {},
   logoURL: null,
-  description: null
+  description: null,
+  type: null
 }
 
 export function dropReducer(
@@ -50,6 +51,8 @@ export function dropReducer(
           return {...state, logoURL: action.payload.logoURL }
         case Constants.DROP_SET_DESCRIPTION:
           return {...state, description: action.payload.description }
+        case Constants.DROP_SET_TYPE:
+          return {...state, type: action.payload.type }
         default:
             return state;
     }
