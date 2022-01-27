@@ -1,8 +1,6 @@
 import { ActionType } from 'typesafe-actions';
 import * as actions from './actions'
-import { TDropStep } from 'types'
-
-export type TClaims = {[address: string]: { index: number, address: string, proof: string[], tokenId: string}}
+import { TDropStep, TRecipientsData, TDropType } from 'types'
 
 export interface DropState {
   step: TDropStep,
@@ -17,9 +15,10 @@ export interface DropState {
   proof: string[],
   index: number,
   hash: null | string,
-  claims: TClaims,
+  claims: TRecipientsData,
   logoURL: string | null,
-  description: string | null
+  description: string | null,
+  type: TDropType | null
 }
 
 

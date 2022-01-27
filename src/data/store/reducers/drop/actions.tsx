@@ -1,7 +1,6 @@
 import { action } from 'typesafe-actions';
 import { Constants } from './constants';
-import { TDropStep } from 'types'
-import { TClaims } from './types'
+import { TDropStep, TDropType, TRecipientsData } from 'types'
 
 export function setStep(step: TDropStep) {
   return action(Constants.DROP_SET_STEP, { step })
@@ -55,8 +54,12 @@ export function setHash (hash: string) {
   return action(Constants.DROP_SET_HASH, { hash })
 }
 
-export function setClaims (claims: TClaims) {
+export function setClaims (claims: TRecipientsData) {
   return action(Constants.DROP_SET_CLAIMS, { claims })
+}
+
+export function setType (type: TDropType) {
+  return action(Constants.DROP_SET_TYPE, { type })
 }
 
 export function setLogoURL (logoURL: string) {
