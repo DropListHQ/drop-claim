@@ -16,7 +16,7 @@ const mapStateToProps = ({
 type ReduxType = ReturnType<typeof mapStateToProps>
 
 const ClaimingProcess: FC<ReduxType> = ({ hash, chainId }) => {
-  const explorerUrl = chainId && hash ? <span>See details on <Link href={`${defineExplorerURL(chainId)}/tx/${hash}`}>Explorer</Link></span> : null
+  const explorerUrl = chainId && hash ? <span>See details on <Link target='_blank' href={`${defineExplorerURL(chainId)}/tx/${hash}`}>Explorer</Link></span> : null
   return <Container>
     <Loader>
       <Icons.DroplistLogo width='40' height='48' />
