@@ -40,7 +40,7 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         chainId: number,
         address: string,
         history: any
-      ) => dropAsyncActions.getInitialData(dispatch, provider, ipfs, chainId, address, history),
+      ) => dropAsyncActions.getInitialData(dispatch, provider, ipfs, chainId, address),
       setStep: (step: TDropStep) => dispatch(dropActions.setStep(step))
   }
 }

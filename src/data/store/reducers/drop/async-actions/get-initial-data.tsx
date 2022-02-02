@@ -8,11 +8,12 @@ import { getIPFSData } from 'data/api'
 import { ethers } from 'ethers'
 import { DropInterfaceERC1155, DropFactoryInterface } from '@drop-protocol/drop-sdk'
 import contracts from 'configs/contracts'
-import { hexlifyIpfsHash, IPFSRedefineUrl } from 'helpers'
+import { hexlifyIpfsHash, getValidImage } from 'helpers'
 import { TDropType, TRecipientsData } from 'types'
-
+import { utils } from 'ethers'
 import getERC1155Data from './get-erc1155-token-data'
 import getERC721Data from './get-erc721-token-data'
+import getERC20Data from './get-erc20-token-data'
 
 type TResponse = {
   chainId: number;
@@ -30,8 +31,7 @@ export default async function getData(
   provider: any,
 	ipfs: string,
   userChainId: number,
-  userAddress: string,
-  history: any
+  userAddress: string
 ) {
   dispatch(actionsDrop.setLoading(true))
   const { data }: { data: TResponse } = await getIPFSData.get(ipfs)
@@ -69,7 +69,8 @@ export default async function getData(
   dispatch(actionsDrop.setTitle(title))
   dispatch(actionsDrop.setDescription(description))
   dispatch(actionsDrop.setClaims(claims))
-  dispatch(actionsDrop.setLogoURL(logoURL))
+  const validLogoURL = await getValidImage(logoURL)
+  dispatch(actionsDrop.setLogoURL(validLogoURL))
   dispatch(actionsDrop.setType(type))
 
   if (claims[userAddress]) {
@@ -82,7 +83,7 @@ export default async function getData(
       dispatch(actionsDrop.setAmount(amount))
       dispatch(actionsDrop.setTokenId(tokenId))
       dispatch(actionsToken.setDescription(description))
-      dispatch(actionsToken.setImage(IPFSRedefineUrl(image)))
+      dispatch(actionsToken.setImage(image))
       dispatch(actionsToken.setName(name))
     }
 
@@ -90,13 +91,23 @@ export default async function getData(
       const { name, image, description } = await getERC721Data(provider, tokenAddress, tokenId)
       dispatch(actionsDrop.setTokenId(tokenId))
       dispatch(actionsToken.setDescription(description))
-      dispatch(actionsToken.setImage(IPFSRedefineUrl(image)))
+      dispatch(actionsToken.setImage(image))
       dispatch(actionsToken.setName(name))
+    }
+
+    if (amount && !tokenId && type === 'erc20') {
+      const { symbol, decimals, image } = await getERC20Data(provider, tokenAddress, userChainId)
+      dispatch(actionsToken.setName(symbol))
+      dispatch(actionsToken.setImage(image))
+      dispatch(actionsToken.setDecimals(decimals))
+      dispatch(actionsDrop.setAmount(amount))
+      dispatch(actionsToken.setDescription(description))
     }
     
     dispatch(actionsDrop.setProof(proof))
     dispatch(actionsDrop.setIndex(index))
     if (dropAddress) {
+      console.log({ dropAddress, index })
       const dropContractInstance = new ethers.Contract(dropAddress, DropInterfaceERC1155, provider)
       
       const isClaimed = await dropContractInstance.isClaimed(index)

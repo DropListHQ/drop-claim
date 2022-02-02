@@ -7,6 +7,7 @@ import getHashVariables from './get-hash-variables'
 import defineExplorerURL from './define-explorer-url'
 import hexlifyIpfsHash from './hexlify-ipfs-hash'
 import IPFSRedefineUrl from './ipfs-redefine-url'
+import getValidImage from './get-valid-image'
 
 export {
   shortenString,
@@ -17,5 +18,6 @@ export {
   getHashVariables,
   defineExplorerURL,
   hexlifyIpfsHash,
-  IPFSRedefineUrl
+  IPFSRedefineUrl,
+  getValidImage
 }

@@ -5,7 +5,8 @@ export interface TokenState {
   loading: boolean,
   name: string,
   description: string,
-  image: string | null
+  image: string | null,
+  decimals: number
 }
 
 export type TokenActions = ActionType<typeof actions>;

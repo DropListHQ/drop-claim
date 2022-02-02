@@ -1284,10 +1284,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@drop-protocol/drop-sdk@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@drop-protocol/drop-sdk/-/drop-sdk-0.2.0.tgz#72ae8de83ca8531a76982e8cbf43a99eca27add3"
-  integrity sha512-TvlVQU0FE/6sPA7fm+bJPxGkv68YcATsL4+x2aK6iR7MO4SIpdPi2mtbylNmInCWdtoiexWoN2ZqYIM1txm4PQ==
+"@drop-protocol/drop-sdk@0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@drop-protocol/drop-sdk/-/drop-sdk-0.2.1.tgz#471e2d674f9dccc4b95d68268b0b4bebb995ceb4"
+  integrity sha512-uE/qg4RUejqsg1af/2qeEUabJz4Q7uyFynHC+1XTynk7F8rgYvBhI+Pkzu4Q3qiVQLC0jFf4+EhhmUcBhIr18w==
   dependencies:
     "@ethersproject/abi" "^5.5.0"
     "@ethersproject/basex" "^5.5.0"
@@ -1298,6 +1298,7 @@
     "@ethersproject/signing-key" "^5.5.0"
     "@ethersproject/solidity" "^5.5.0"
     "@ethersproject/transactions" "^5.5.0"
+    "@ethersproject/units" "^5.5.0"
     ethers "^5.5.3"
 
 "@emotion/cache@^11.4.0", "@emotion/cache@^11.5.0":
@@ -1736,7 +1737,7 @@
     "@ethersproject/rlp" "^5.5.0"
     "@ethersproject/signing-key" "^5.5.0"
 
-"@ethersproject/units@5.5.0":
+"@ethersproject/units@5.5.0", "@ethersproject/units@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/units/-/units-5.5.0.tgz#104d02db5b5dc42cc672cc4587bafb87a95ee45e"
   integrity sha512-7+DpjiZk4v6wrikj+TCyWWa9dXLNU73tSTa7n0TSJDxkYbV3Yf1eRh9ToMLlZtuctNYu9RDNNy2USq3AdqSbag==

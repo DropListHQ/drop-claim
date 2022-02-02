@@ -54,6 +54,22 @@ const mapDispatcherToProps = (dispatch: Dispatch<DropActions> & Dispatch<TokenAc
         dropAddress,
         proof
       ),
+      claimERC20: (
+        address: string,
+        proof: string[],
+        amount: string,
+        dropAddress: string,
+        provider: any,
+        index: number
+      ) => dropAsyncActions.claimERC20(
+        dispatch,
+        provider,
+        index,
+        amount,
+        address,
+        dropAddress,
+        proof
+      ),
       stepStep: (step: TDropStep) => dispatch(dropActions.setStep(step))
   }
 }
@@ -77,6 +93,7 @@ const InitialScreen: FC<ReduxType> = ({
   index,
   claimERC1155,
   claimERC721,
+  claimERC20,
   stepStep
 }) => {
   const allowed = allowedAddressList.some(item => item.toLowerCase() === address.toLocaleLowerCase())
@@ -91,7 +108,8 @@ const InitialScreen: FC<ReduxType> = ({
     <ScreenButton
       disabled={
         (type === 'erc1155' && (!tokenId || !amount || !allowed)) ||
-        (type === 'erc721' && (!tokenId || !allowed))
+        (type === 'erc721' && (!tokenId || !allowed)) ||
+        (type === 'erc20' && (!amount || !allowed))
       }
       title='Claim'
       onClick={() => {
@@ -100,10 +118,11 @@ const InitialScreen: FC<ReduxType> = ({
           return claimERC1155(address, proof, tokenId, amount, dropAddress, provider, index)
         }
         if (type === 'erc721' && tokenId) {
-          
           return claimERC721(address, proof, tokenId, dropAddress, provider, index)
         }
-        
+        if (type === 'erc20' && amount) {
+          return claimERC20(address, proof, amount, dropAddress, provider, index)
+        }
       }}
     />
     <TextComponent

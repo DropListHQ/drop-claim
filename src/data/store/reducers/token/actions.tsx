@@ -18,3 +18,9 @@ export function setImage(image: string) {
     image
   })
 }
+
+export function setDecimals(decimals: number) {
+  return action(Constants.TOKEN_SET_DECIMALS, {
+    decimals
+  })
+}
